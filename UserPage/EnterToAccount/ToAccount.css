@@ -1,0 +1,12 @@
+.Parent {
+    height: 100vh;
+}
+
+.FormStyle {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-width: 2px !important;
+    border-radius: 5px;
+}
