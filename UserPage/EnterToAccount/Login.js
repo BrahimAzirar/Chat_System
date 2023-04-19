@@ -9,13 +9,16 @@ export default function Login() {
   function EnterToAccount(e) {
     e.preventDefault();
     axios.get('http://localhost:3005/Users').then(res => {
-      res.data.find(ele => {
+      const EnterToAccount = res.data.find(ele => {
         if (ele.Email === Email.current.value && ele.Password === Password.current.value) {
-          alert("welcome to your account");
-        } else {
-          alert("this account not found !");
+          return ele;
         }
       });
+      if (EnterToAccount) {
+        window.location.href = `/account/${EnterToAccount.id}`;
+      } else {
+        alert("This account not found !")
+      }
     });
   };
 

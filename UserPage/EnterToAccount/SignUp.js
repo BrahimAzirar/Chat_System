@@ -12,9 +12,9 @@ export default function SignUp() {
             axios.post('http://localhost:3005/Users', {
                 FirstName: FirstName.current.value, LastName: LastName.current.value,
                 Email: Email.current.value, Thel: Thel.current.value,
-                Password: Password.current.value, Admin: false
-            });
-            alert("The account created !")
+                Password: Password.current.value, Admin: false,
+				Profile: "https://image.shutterstock.com/image-vector/male-default-avatar-profile-gray-260nw-362901365.jpg"
+            }).then(res => window.location.href = `/account/${res.data.id}`)
         } else {
             alert("The password not valid check your password !");
         };
@@ -26,8 +26,8 @@ export default function SignUp() {
 	    	<h2 className='text-center mb-3'>CS | Chat System</h2>
 	    	<form className='row justify-content-center'>
 	    		<div className="row mb-3 col-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
-	    			<label htmlFor="firstName" className="col-sm-3 col-md-12 col-form-label">First Name</label>
-	    			<div className="col-sm-9 col-md-12">
+	    			<label htmlFor="firstName" className="col-sm-5 col-md-12 col-form-label">First Name</label>
+	    			<div className="col-sm-7 col-md-12">
 	    				<input type="text" ref={FirstName} className="form-control" id="firstName" placeholder="Enter your first name" />
 	    			</div>
 	    		</div>
