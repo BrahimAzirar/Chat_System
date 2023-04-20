@@ -5,6 +5,14 @@
     outline: none !important;
 }
 
+.AccountHome {
+    background-color: #F0F2F5;
+}
+
+.AccountHome header {
+    background-color: white;
+}
+
 .HeaderItems {
     width: 40px;
     height: 40px;
@@ -27,4 +35,14 @@
 
 .SectionHome > div {
     border: 1px solid;
+}
+
+.createPost {
+    height: 130px;
+}
+
+.createPost > div:last-child {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
