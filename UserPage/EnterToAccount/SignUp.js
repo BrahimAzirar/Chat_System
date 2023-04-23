@@ -12,7 +12,7 @@ export default function SignUp() {
             axios.post('http://localhost:3005/Users', {
                 FirstName: FirstName.current.value, LastName: LastName.current.value,
                 Email: Email.current.value, Thel: Thel.current.value,
-                Password: Password.current.value, Admin: false,
+                Password: Password.current.value, Admin: false, FriendsList: [],
 				Profile: "https://image.shutterstock.com/image-vector/male-default-avatar-profile-gray-260nw-362901365.jpg"
             }).then(res => window.location.href = `/account/${res.data.id}`)
         } else {

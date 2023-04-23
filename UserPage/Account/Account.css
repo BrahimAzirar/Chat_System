@@ -31,6 +31,7 @@
 
 .SectionHome {
     height: 91%;
+    overflow: hidden;
 }
 
 .SectionHome > div {
@@ -39,10 +40,242 @@
 
 .createPost {
     height: 130px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
 }
 
 .createPost > div:last-child {
     display: flex;
     justify-content: space-around;
     align-items: center;
+}
+
+.navbar {
+    list-style: none;
+}
+
+.navbar li {
+    margin: 4px 0 !important;
+    width: 100%;
+    padding: 7px !important;
+
+}
+
+.Posts {
+    height: 435px;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.PostContent {
+    width: 90%;
+    height: fit-content;
+    /* max-height: 400px; */
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.PostHeader {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.PostHeader > div:first-child {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+}
+
+.PostFooter {
+    height: 40px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.PostFooter > div {
+    width: 60px;
+    padding: 2px !important;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.PostFooter > div:hover {
+    background-color: #EEE;
+}
+
+.Content_Post {
+    /* max-height: 300px; */
+}
+
+.Content_Post > div:first-of-type {
+    height: fit-content;
+    max-height: 100px;
+    overflow-x: hidden;
+}
+
+.Content_Post > div:last-of-type {
+    height: fit-content;
+    /* max-height: 200px; */
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comment {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 50%;
+    height: 300px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.comment > div:first-of-type {
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 95%;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.comment > div:first-of-type:hover {
+    background-color: #EEE;
+}
+
+.comment > div:last-of-type {
+    height: 85%;
+}
+
+.comment > div:last-of-type form {
+    height: 60px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+}
+
+.comment > div:last-of-type > div {
+    height: 155px;
+    position: relative;
+    margin-top: 10px !important;
+    overflow-x: hidden;
+}
+
+.disactive {
+    pointer-events: none;
+    opacity: .8;
+}
+
+.CommentAlert {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.1rem;
+}
+
+.UserComment {
+    height: fit-content;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.UserComment > div:first-of-type {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+}
+
+.UserComment > div:last-of-type {
+    max-width: 550px;
+    background-color: #eee;
+    padding: 7px 20px !important;
+    border-radius: 20px;
+}
+
+.UserComment > div:last-of-type p {
+    font-size: .8rem;
+}
+
+.Chats {
+    position: relative;
+    width: 95%;
+    height: 150px;
+    max-height: 680px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.CancelChat {
+    width: 30px;
+    height: 30px;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.CancelChat:hover {
+    background-color: #EEE;
+}
+
+.Friends {
+    height: 60px;
+    max-height: 680px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.Friend {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 0 5px !important;
+    /* border: 1px solid; */
+}
+
+.Friend:hover {
+    background: #EEE;
+}
+
+.Friend > div:first-of-type {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+}
+
+.Friend > div:last-of-type {
+    width: 250px;
+    height: 45px;
 }
