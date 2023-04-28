@@ -35,7 +35,7 @@
 }
 
 .SectionHome > div {
-    border: 1px solid;
+    /* border: 1px solid; */
 }
 
 .createPost {
@@ -224,7 +224,7 @@
 .Chats {
     position: relative;
     width: 95%;
-    height: 150px;
+    min-height: 150px;
     max-height: 680px;
     left: 50%;
     transform: translateX(-50%);
@@ -249,7 +249,7 @@
 }
 
 .Friends {
-    height: 60px;
+    min-height: 60px;
     max-height: 680px;
     overflow-x: hidden;
     position: relative;
@@ -278,4 +278,92 @@
 .Friend > div:last-of-type {
     width: 250px;
     height: 45px;
+}
+
+.messages {
+    height: 550px;
+}
+
+.messages > div:first-of-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.messages > div:first-of-type > div:first-of-type {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.messages > div:first-of-type > div:first-of-type:hover {
+    background-color: #EEE;
+}
+
+.messages > div:first-of-type > div:last-of-type {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #EEE;
+    border-radius: 100%;
+}
+
+.messages > div:last-of-type {
+    min-height: 480px;
+}
+
+.messages form {
+    display: flex;
+    justify-content: space-around;
+}
+
+.User, .Target {
+    width: fit-content;
+    padding: 5px 7px !important;
+    position: relative;
+    margin: 2px 0 !important;
+}
+
+.User {
+    background: #0d6efd;
+    color: white;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-left-radius: 7px;
+}
+
+.User::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: -4px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-right: 5px solid #0d6efd;
+    transform: rotate(45deg);
+}
+
+.Target {
+    left: 0%;
+    background: #EEE;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.Target::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -4px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-left: 5px solid #eee;
+    transform: rotate(-45deg);
 }
