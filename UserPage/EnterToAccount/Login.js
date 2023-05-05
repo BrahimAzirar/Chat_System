@@ -8,7 +8,7 @@ export default function Login() {
 
   function EnterToAccount(e) {
     e.preventDefault();
-    axios.get('http://localhost:3005/Users').then(res => {
+    axios.get('http://localhost/Chat_System/src/BackEnd/Users.php').then(res => {
       const EnterToAccount = res.data.find(ele => {
         if (ele.Email === Email.current.value && ele.Password === Password.current.value) {
           return ele;
@@ -17,7 +17,7 @@ export default function Login() {
       if (EnterToAccount) {
         window.location.href = `/account/${EnterToAccount.id}`;
       } else {
-        alert("This account not found !")
+        alert("This account not found !");
       }
     });
   };

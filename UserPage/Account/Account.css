@@ -313,7 +313,12 @@
 }
 
 .messages > div:last-of-type {
-    min-height: 480px;
+    height: 480px;
+    overflow-x: hidden;
+}
+
+.messages > div:last-of-type::-webkit-scrollbar {
+    display: none;
 }
 
 .messages form {
@@ -321,11 +326,15 @@
     justify-content: space-around;
 }
 
+.ParentUser {
+    display: flex;
+    justify-content: end;
+}
+
 .User, .Target {
     width: fit-content;
     padding: 5px 7px !important;
     position: relative;
-    margin: 2px 0 !important;
 }
 
 .User {
@@ -349,7 +358,6 @@
 }
 
 .Target {
-    left: 0%;
     background: #EEE;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
@@ -366,4 +374,31 @@
     border-right: 5px solid transparent;
     border-left: 5px solid #eee;
     transform: rotate(-45deg);
+}
+
+.ListUsers {
+    width: 90%;
+    height: fit-content;
+    max-height: 500px;
+    overflow-x: hidden;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.ListUsers > div, .userData {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.userData > div:first-child {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #EEE;
+    border-radius: 100%;
 }

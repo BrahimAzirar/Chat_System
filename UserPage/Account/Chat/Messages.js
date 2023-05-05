@@ -12,22 +12,23 @@ export default function Messages() {
   const [UserMessages, setUserMessages] = useState([]);
   const [AllMessages, setAllMessages] = useState([]);
 
-  const imageProfile = useRef();
+  const imageProfile = useRef(), mess = useRef();
 
   useEffect(() => {
-    axios.get(`http://localhost:3005/Users/${TargetId}`).then(resp => {
-      imageProfile.current.src = resp.data.Profile;
-    });
-    axios.get('http://localhost:3005/Chat').then(resp => {
-      resp.data.forEach(ele => {
-        if (ele.userId === UserId && ele.FriendId === TargetId) {
-          setUserMessages(ele.messageInfo);
-        }
-        else if (ele.userId === TargetId && ele.FriendId === UserId) {
-          setTargetMessages(ele.messageInfo);
-        };
+    axios.post(`http://localhost/Chat_System/src/BackEnd/Users.php`, new URLSearchParams({
+      type:"GetUsersPost", id: TargetId
+    }))
+      .then(resp => {
+        imageProfile.current.src = resp.data.Profile;
       });
-    });
+
+    axios.post("http://localhost/Chat_System/src/BackEnd/Chat.php", new URLSearchParams({
+      type: "GetMessages", UserId: UserId, FriendId: TargetId
+    }))
+      .then(resp => {
+        setUserMessages(resp.data.User);
+        setTargetMessages(resp.data.Target);
+      });
   }, []);
 
   useEffect(() => {
@@ -48,39 +49,60 @@ export default function Messages() {
     dispatch({type: "BacktoChatMenu"});
   };
 
+  function SendMessage() {
+    if (mess.current.value) {
+      const curentdate = new Date();
+      const data = {
+        from: UserId,
+        mess: mess.current.value, from: UserId,
+        date: `${curentdate.getFullYear()}-${curentdate.getMonth() + 1}-${curentdate.getDate()} ${curentdate.getHours()}:${curentdate.getMinutes()}:${curentdate.getSeconds()}`
+      };
+
+      axios.post("http://localhost/Chat_System/src/BackEnd/Chat.php", new URLSearchParams({
+        type: "SendMessage", ...data, friend: TargetId
+      }))
+      setAllMessages([...AllMessages, data]); mess.current.value = '';
+    } else {
+      alert('Write something !');
+    };
+  };
+
   return (
     <div className='messages'>
       <div>
         <div onClick={BacktoChatMenu}>
-            <i class="bi bi-arrow-left"></i>
+            <i className="bi bi-arrow-left"></i>
         </div>
         <div>
             <img src="" ref={imageProfile} width='100%' height='100%' style={{ borderRadius: "100%" }}/>
         </div>
       </div>
       <div className='py-2'>
-        {AllMessages.map((ele, idx) => <Message mess={ele.mess} from={ele.from}/>)}
+        {AllMessages.map((ele, idx) => <Message comKey={idx} mess={ele.mess} from={ele.from} />)}
       </div>
       <form>
-        <input type="text" className='form-control' style={{ width: "70%" }} placeholder='Write your message...' />
-        <button type="button" className='btn btn-primary' style={{ width: "25%" }}>Send</button>
+        <input type="text" ref={mess} className='form-control' style={{ width: "70%" }} placeholder='Write your message...' />
+        <button type="button" className='btn btn-primary' style={{ width: "25%" }} onClick={SendMessage}>Send</button>
       </form>
     </div>
   );
 };
 
 
-function Message({ mess, from }) {
+function Message({ mess, from, comKey }) {
   const UserId = useSelector(state => state.ChatReducer.messages.userId);
-  const [WidthValue, setWidthValue] = useState(0);
-
-  useEffect(() => {
-    console.log(WidthValue);
-  }, [WidthValue])
 
   if (from === UserId) {
-    return <p className='User' onChange={e => setWidthValue(parseInt(e.target.offsetWidth))} style={{ left: `calc(100% - ${WidthValue}px)` }}>{mess}</p>
+    return (
+      <div key={comKey} className='ParentUser my-1'>
+        <p className='User me-2'>{mess}</p>
+      </div>
+    );
   } else {
-    return <p className='Target'>{mess}</p>
-  }
+    return (
+      <div key={comKey} className='my-1'>
+        <p className='Target ms-2'>{mess}</p>
+      </div>
+    );
+  };
 };

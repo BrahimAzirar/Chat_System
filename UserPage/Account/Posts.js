@@ -6,116 +6,134 @@ import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 export default function Posts({ data }) {
-
   const dispatch = useDispatch();
 
-  const [LikesColor, setLikesColor] = useState(''); // this state for 'like' icons color
-  const [DislikesColor, setDislikesColor] = useState(''); // this state for 'dislike' icons color
-  const [LikeCount, setLikeCount] = useState(data.Likes.length);
-  const [DislikeCount, setDislikeCount] = useState(data.Dislikes.length);
+  const [LikesColor, setLikesColor] = useState('');
+  const [DislikesColor, setDislikesColor] = useState('');
+  const [LikeCount, setLikeCount] = useState([]);
+  const [DislikeCount, setDislikeCount] = useState([]);
   const [TargetUser, setTargetUser] = useState([]);
-  const userId = useParams().userId;
+  const userId = parseInt(useParams().userId);
 
   useEffect(() => {
-    axios.get('http://localhost:3005/Users').then(resp => resp.data.forEach(user => {
-      if (user.id === data.sender) {
-        setTargetUser({FirstName: user.FirstName, LastName: user.LastName, Profile: user.Profile});
-      };
-    }));
+    axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', new URLSearchParams({
+      type: "GetUsersPost", id: data.UserId
+    }))
+      .then(resp => setTargetUser(resp.data));
 
-    if (data.Likes.includes(parseInt(userId))) {
-      setLikesColor('text-primary');
-    } else if (data.Dislikes.includes(parseInt(userId))) {
-      setDislikesColor('text-primary');
-    }
+    axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', new URLSearchParams({
+      type: "Likes&Dislikes", PostId: data.id
+    }))
+      .then(resp => {
+        setLikeCount(resp.data.Likes); setDislikeCount(resp.data.Dislikes);
+      });
 
   }, []);
 
+  useEffect(() => {
+    if (LikeCount.includes(parseInt(userId))) {
+      setLikesColor('text-primary');
+    }
+    else if (DislikeCount.includes(parseInt(userId))) {
+      setDislikesColor('text-primary');
+    }
+  }, [LikeCount, DislikeCount]);
+
   function ReactWithLike() {
     if (LikesColor) {
-      const NewLikeCount = data.Likes.filter(ele => {
+      const NewLikeCount = LikeCount.filter(ele => {
         if (ele !== parseInt(userId)) {
           return ele;
         }
       });
 
-      axios.put(`http://localhost:3005/Posts/${data.id}`, {...data, Likes: NewLikeCount});
-      setLikesColor(''); setLikeCount(LikeCount - 1);
+      axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+        type: "DeleteInteraction", PostId: data.id, UserId: userId
+      }));
+      setLikesColor(''); setLikeCount(NewLikeCount);
     } else {
       if (DislikesColor) {
-        const NewDislikeCount = data.Dislikes.filter(ele => {
+        const NewDislikeCount = DislikeCount.filter(ele => {
           if (ele !== parseInt(userId)) {
             return ele;
           };
         });
 
-        axios.put(`http://localhost:3005/Posts/${data.id}`, {
-          ...data, Likes: [...data.Likes, parseInt(userId)], Dislikes: NewDislikeCount
-        });
+        axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+          type: "changingInteraction", PostId: data.id, UserId: userId, InteractionType: 'Like'
+        }));
 
         setLikesColor('text-primary'); setDislikesColor('');
-        setLikeCount(LikeCount + 1); setDislikeCount(DislikeCount - 1);
+        setLikeCount([...LikeCount, userId]); setDislikeCount(NewDislikeCount);
       } else {
-        axios.put(`http://localhost:3005/Posts/${data.id}`, {...data, Likes: [...data.Likes, parseInt(userId)]});
-        setLikesColor('text-primary'); setLikeCount(LikeCount + 1);
+        axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+          PostId: data.id, UserId: userId, InteractionType: 'Like', type: "ReactWithPost"
+        }));
+        setLikesColor('text-primary'); setLikeCount([...LikeCount, parseInt(userId)]);
       }
     }
   };
 
   function ReactWithDislike() {
     if (DislikesColor) {
-      const NewDislikeCount = data.Dislikes.filter(ele => {
+      const NewDislikeCount = DislikeCount.filter(ele => {
         if (ele !== parseInt(userId)) {
           return ele;
         };
       });
 
-      axios.put(`http://localhost:3005/Posts/${data.id}`, {...data, Dislikes: NewDislikeCount});
-      setDislikesColor(''); setDislikeCount(DislikeCount - 1);
+      axios.put(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+        type: "DeleteInteraction", PostId: parseInt(data.id), UserId: userId
+      }));
+      setDislikesColor(''); setDislikeCount(NewDislikeCount);
     } else {
       if (LikesColor) {
-        const NewLikeCount = data.Likes.filter(ele => {
+        const newLikeCount = LikeCount.filter(ele => {
           if (ele !== parseInt(userId)) {
             return ele;
           };
         });
 
-        axios.put(`http://localhost:3005/Posts/${data.id}`, {
-          ...data, Dislikes: [...data.Dislikes, parseInt(userId)], Likes: NewLikeCount
-        });
+        axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+          type: "changingInteraction", PostId: data.id, UserId: userId, InteractionType: 'Dislike'
+        }));
 
         setDislikesColor('text-primary'); setLikesColor('');
-        setDislikeCount(DislikeCount + 1); setLikeCount(LikeCount - 1);
+        setDislikeCount([...DislikeCount, userId]); setLikeCount(newLikeCount);
       } else {
-        axios.put(`http://localhost:3005/Posts/${data.id}`, {...data, Dislikes: [...data.Dislikes, parseInt(userId)]});
-        setDislikesColor('text-primary'); setDislikeCount(LikeCount + 1);
+        axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+          PostId: data.id, UserId: userId, InteractionType: 'Dislike', type: "ReactWithPost"
+        }))
+        setDislikesColor('text-primary'); setDislikeCount([...DislikeCount, userId]);
       }
     }
   };
 
   function getFileTypeFromBase64(base64String) {
-    if (base64String.includes("/9j/")) {
+    if (base64String) {
+      if (base64String.includes("/9j/")) {
         return "img";
-    } else if (base64String.includes("iVBORw0KGgoAAAANSUhEUgAAA")) {
-        return "img";
-    } else if (base64String.includes("UklGR")) {
-        return "img";
-    } else if (base64String.includes("data:video/mp4;base64,")) {
-        return "vedio";
-    } else if (base64String.includes("data:video/webm;base64,")) {
-        return "vedio";
-    } else if (base64String.includes("data:video/ogg;base64,")) {
-        return "vedio";
-    } else if (base64String.includes("data:image/jpeg;base64,")) {
-        return "img";
-    } else if (base64String.includes("data:image/png;base64,")) {
-        return "img";
-    } else if (base64String.includes("data:image/gif;base64,")) {
-        return "img";
-    } else if (base64String.includes("data:video/x-matroska;base64,")) {
-        return "vedio";
-    } else {
-        return "not";
+      } else if (base64String.includes("iVBORw0KGgoAAAANSUhEUgAAA")) {
+          return "img";
+      } else if (base64String.includes("UklGR")) {
+          return "img";
+      } else if (base64String.includes("data:video/mp4;base64,")) {
+          return "vedio";
+      } else if (base64String.includes("data:video/webm;base64,")) {
+          return "vedio";
+      } else if (base64String.includes("data:video/ogg;base64,")) {
+          return "vedio";
+      } else if (base64String.includes("data:image/jpeg;base64,")) {
+          return "img";
+      } else if (base64String.includes("data:image/png;base64,")) {
+          return "img";
+      } else if (base64String.includes("data:image/gif;base64,")) {
+          return "img";
+      } else if (base64String.includes("data:video/x-matroska;base64,")) {
+          return "vedio";
+      } else {
+          return "not";
+      }
     }
   };
 
@@ -143,17 +161,17 @@ export default function Posts({ data }) {
           <p>{`${TargetUser.FirstName} ${TargetUser.LastName}`}</p>
       </div>
       <div className='Content_Post'>
-        <div className='mb-2'>{data.PostArticle}</div>
+        <div className='mb-2'>{data.PostActicle}</div>
         <div>
           {ImgOrVedio()}
         </div>
       </div>
       <div className='PostFooter border mt-2'>
-        <div className={LikesColor} title='Likes' onClick={ReactWithLike}>
-          <AiOutlineLike /><span className='ms-1'>{LikeCount}</span>
+        <div className={LikesColor} onClick={ReactWithLike}>
+          <AiOutlineLike /><span className='ms-1'>{LikeCount.length}</span>
         </div>
-        <div className={DislikesColor} title='Dislikes' onClick={ReactWithDislike}>
-          <AiOutlineDislike /><span className='ms-1'>{DislikeCount}</span>
+        <div className={DislikesColor} onClick={ReactWithDislike}>
+          <AiOutlineDislike /><span className='ms-1'>{DislikeCount.length}</span>
         </div>
         <div onClick={ShowTheCommentsComponents}><BiCommentDetail/></div>
       </div>

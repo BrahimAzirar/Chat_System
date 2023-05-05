@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 export default function Comments() {
 
-    const Taget = useSelector(state => state.CommentReducer.TargetPost);
+    const Target = useSelector(state => state.CommentReducer.TargetPost);
     const dispatch = useDispatch();
 
     const [UsersComments, setUsersComments] = useState([]);
@@ -14,7 +14,10 @@ export default function Comments() {
     const userId = parseInt(useParams().userId);
 
     useEffect(() => {
-        axios.get(`http://localhost:3005/Posts/${Taget.id}`).then(resp => setUsersComments(resp.data.Comments));
+        axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+            PostId: Target.id, type: "GetComments"
+        }))
+            .then(resp => setUsersComments(resp.data));
     }, []);
 
     function HideTheCommentsComponent() {
@@ -24,10 +27,15 @@ export default function Comments() {
 
     function SendComment() {
         if (InputComment.current.value) {
-            axios.put(`http://localhost:3005/Posts/${Taget.id}`, {...Taget, Comments: [
-                ...Taget.Comments, {target: userId, comment: InputComment.current.value}
-            ]})
-                .then(resp => console.log(resp.data));
+            const comment = {
+                PostId: Target.id, UserId: userId, Comment: InputComment.current.value
+            };
+            axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+                ...comment, type: "AddComment"
+            }));
+            setUsersComments([...UsersComments, {
+                target: userId, comment: InputComment.current.value
+            }]); InputComment.current.value = '';
         } else {
             alert('Write somthing!');
         }
@@ -60,11 +68,14 @@ function Users_Comments({ item, content }) {
     const [TargetInfo, setTargetInfo] = useState({});
 
     useEffect(() => {
-        axios.get(`http://localhost:3005/Users/${content.target}`).then(resp => setTargetInfo(resp.data));
+        axios.post(`http://localhost/Chat_System/src/BackEnd/Users.php`, new URLSearchParams({
+            id: content.target, type: "GetUsersPost"
+        }))
+            .then(resp => setTargetInfo(resp.data));
     }, []);
 
     return (
-        <div className='UserComment my-2' key={item}>
+        <div className='UserComment my-2' key={`${item}`}>
             <div className='me-2'>
                 <img src={TargetInfo.Profile} alt="Profile" width='100%' height='100%' style={{ borderRadius: "100%" }}/>
             </div>

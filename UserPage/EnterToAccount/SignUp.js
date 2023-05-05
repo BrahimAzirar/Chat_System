@@ -9,12 +9,15 @@ export default function SignUp() {
     function CreateAccount(e) {
         e.preventDefault();
         if (Password.current.value === ResetPassword.current.value) {
-            axios.post('http://localhost:3005/Users', {
+			const data = new URLSearchParams({
                 FirstName: FirstName.current.value, LastName: LastName.current.value,
                 Email: Email.current.value, Thel: Thel.current.value,
-                Password: Password.current.value, Admin: false, FriendsList: [],
+                Password: Password.current.value, Admin: true, type: "CreateAccount",
 				Profile: "https://image.shutterstock.com/image-vector/male-default-avatar-profile-gray-260nw-362901365.jpg"
-            }).then(res => window.location.href = `/account/${res.data.id}`)
+            });
+
+            axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', data)
+				.then(res => window.location.href = `/account/${res.data}`);
         } else {
             alert("The password not valid check your password !");
         };

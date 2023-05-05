@@ -9,15 +9,42 @@ export default function UsersChat() {
     const dispatch = useDispatch();
 
     const [FriendsList, setFriendsList] = useState([]);
-    const userId = useParams().userId;
+    const userId = parseInt(useParams().userId);
 
     useEffect(() => {
-        axios.get(`http://localhost:3005/Users/${userId}`).then(resp => setFriendsList(resp.data.FriendsList));
+      axios.post(`http://localhost/Chat_System/src/BackEnd/FriendsRequests.php`, new URLSearchParams({
+        type: "GetFriends", UserId: userId
+      }))
+        .then(resp => setFriendsList(resp.data));
     }, []);
 
     function HideChat() {
         dispatch({ type: "HideChat" });
     };
+
+    function SearchFriend(e) {
+      // const FriendName = e.target.value; let FriendArr = [];
+      // axios.get(`http://localhost:3005/Users/${userId}`).then(resp => {
+      //   resp.data.FriendsList.forEach(ele => {
+      //     axios.get(`http://localhost:3005/Users/${ele}`).then(friend => {
+      //       if (FriendName) {
+      //         const data = [];
+      //         FriendArr = [...FriendArr, {
+      //           FullName: `${friend.data.FirstName} ${friend.data.LastName}`, id: friend.data.id
+      //         }];
+      //         FriendArr.forEach(ele => {
+      //           if (ele.FullName.includes(FriendName)) {
+      //             data.push(ele.id);
+      //           }
+      //         });
+      //         setFriendsList(data);
+      //       } else {
+      //         setFriendsList(resp.data.FriendsList);
+      //       }
+      //     });
+      //   });
+      // });
+    }
 
   return (
     <>
@@ -27,7 +54,7 @@ export default function UsersChat() {
           <div onClick={HideChat} className='CancelChat me-2'><i className="bi bi-x"></i></div>
         </div>
         <div className='w-75 mx-auto mt-2'>
-            <input type="text" className='form-control px-2' placeholder='Search friend' />
+          <input type="text" onChange={SearchFriend} className='form-control px-2' placeholder='Search friend' />
         </div>
       </div>
       <div className='Friends mt-1'>
@@ -39,7 +66,6 @@ export default function UsersChat() {
 };
 
 function Friends({ item, Friend }) {
-
     const dispatch = useDispatch();
 
     const [FriendData, setFriendData] = useState({});
@@ -47,26 +73,15 @@ function Friends({ item, Friend }) {
     const userId = parseInt(useParams().userId);
 
     useEffect(() => {
-        axios.get(`http://localhost:3005/Users/${Friend}`).then(resp => setFriendData(resp.data));
-        axios.get(`http://localhost:3005/Chat`).then(resp => {
-          const target1 = resp.data.filter(ele => {
-            if (ele.userId === parseInt(Friend) && ele.FriendId === userId) {
-              return ele.messageInfo;
-            };
-          });
-          const target2 = resp.data.filter(ele => {
-            if (ele.userId === userId && ele.FriendId === parseInt(Friend)) {
-              return ele.messageInfo;
-            };
-          });
+        axios.post(`http://localhost/Chat_System/src/BackEnd/Users.php`, new URLSearchParams({
+          type: "GetUsersPost", id: Friend
+        }))
+          .then(resp => setFriendData(resp.data));
 
-          if (target1[0].messageInfo[target1[0].messageInfo.length - 1].date <
-            target2[0].messageInfo[target2[0].messageInfo.length - 1].date) {
-            setLastMessage(target2[0].messageInfo[target2[0].messageInfo.length - 1].mess);
-          } else {
-            setLastMessage(target1[0].messageInfo[target1[0].messageInfo.length - 1].mess);
-          }
-        });
+        axios.post(`http://localhost/Chat_System/src/BackEnd/Chat.php`, new URLSearchParams({
+          type: "LastMessage", UserId: userId, FriendId: Friend
+        }))
+          .then(resp => setLastMessage(resp.data))
     }, []);
 
     function chatWithFriend() {

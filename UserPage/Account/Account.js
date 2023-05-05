@@ -8,63 +8,22 @@ import Comments from './Comments';
 import { useSelector, useDispatch } from 'react-redux';
 import Chat from './Chat/Chat';
 
-export default function Account() {
+export default function Account({ content = <AppPosts /> }) {
 
     const commentsToggle = useSelector(state => state.CommentReducer.ActiveComments);
     const chatToggle = useSelector(state => state.ChatReducer.ActiveChat);
     const dispatch = useDispatch();
 
-    const [PostData, setPostData] = useState([]);
     const [Profile, setProfile] = useState('');
-    const [Post, setPost] = useState(null);
-    const inputPost = useRef();
-    const Article = useRef();
     const userId = useParams().userId;
 
     useEffect(() => {
-        axios.get('http://localhost:3005/Users').then(resp => resp.data.forEach(element => {
-            if (element.id === parseInt(userId)) {
-                setProfile(element.Profile);
-            };
-        }));
-        axios.get('http://localhost:3005/Posts').then(resp => setPostData(resp.data));
+        const data = new URLSearchParams({
+            type: "GetProfile", id: parseInt(userId)
+        });
+        axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', data)
+            .then(resp => setProfile(resp.data));
     }, []);
-
-    useEffect(() => {
-        if (typeof Post === 'string') {
-            axios.post('http://localhost:3005/Posts', {
-                PostArticle: Article.current.value, PostData: Post,
-                Likes: [], Dislikes: [], PostDate: new Date(), sender: parseInt(userId),
-                Comments: []
-            });
-            Article.current.value = ''; inputPost.current.value = '';
-        };
-    }, [Post]);
-
-    function RemovePost(id) {
-        axios.delete(`http://localhost:3005/Posts/${id}`);
-    };
-
-    function fileToBase64(file) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            setPost(reader.result);
-        };
-    };
-
-    function SendPost() {
-        if (Article.current.value) {
-            if (Post) {
-                fileToBase64(Post);
-            } else {
-                setPost('no Posts');
-            }
-            alert("the post sended !");
-        } else {
-            alert("Write something !")
-        };
-    };
 
     function ShowChats() {
         dispatch({ type: "ShowChat" });
@@ -94,22 +53,13 @@ export default function Account() {
             <section className='row SectionHome'>
                 <div className='Menu col-3 p-3'>
                     <ul className='navbar'>
-                        <li><a href="#"><i className="bi bi-house"></i> Home</a></li>
+                        <li><a href={`/account/${userId}`}><i className="bi bi-house"></i> Home</a></li>
+                        <li><a href={`/account/${userId}/Friends`}><span className="material-symbols-outlined">person_add</span>Add Friend</a></li>
+                        <li><a href={`/account/${userId}/FriendsRequests`}><span className="material-symbols-outlined">person</span>Friends Requests</a></li>
                     </ul>
                 </div>
                 <div className='Content col-6 p-3'>
-                    <div className='createPost mb-3 p-3'>
-                        <textarea ref={Article} className="form-control p-2 mb-3" placeholder='Write your article' style={{ maxHeight: "60px", minHeight: "60px" }}></textarea>
-                        <div>
-                            <div>
-                                <input type="file" ref={inputPost} id='post' onChange={e => setPost(e.target.files[0])} className="form-control" accept='.jpg, .png, .jpeg, .mkv, .mp4' />
-                            </div>
-                            <button className='btn btn-primary py-1 px-2' onClick={SendPost}>Send <i className="bi bi-send"></i></button>
-                        </div>
-                    </div>
-                    <div className='Posts'>
-                        {PostData.map(ele => <Posts data={ele}/>)}
-                    </div>
+                    {content}
                 </div>
                 <div className='col-3'>
                     {chatToggle ? <Chat/> : null}
@@ -118,4 +68,75 @@ export default function Account() {
         </div>
     </>
   );
+};
+
+
+function AppPosts() {
+
+    const [PostData, setPostData] = useState([]);
+    const [Post, setPost] = useState(null);
+    const inputPost = useRef();
+
+    const userId = useParams().userId;
+
+    useEffect(() => {
+        axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', new URLSearchParams({
+            type: "GetAllPosts"
+        }))
+            .then(resp => setPostData(resp.data));
+    }, []);
+
+    useEffect(() => {
+        if (typeof Post === 'string') {
+            const date = new Date();
+            const now = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+            const myPost = new URLSearchParams({
+                PostArticle: Article.current.value, PostData: Post,
+                PostDate: now, UserId: parseInt(userId), type: "AddPost"
+            });
+            axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', myPost)
+                .then(resp => setPostData([...PostData, resp.data]));
+            Article.current.value = ''; inputPost.current.value = '';
+        };
+    }, [Post]);
+
+    const Article = useRef();
+
+    function fileToBase64(file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            setPost(reader.result);
+        };
+    };
+
+    function SendPost() {
+        if (Article.current.value) {
+            if (Post) {
+                fileToBase64(Post);
+            } else {
+                setPost('no Posts');
+            }
+            alert("the post sended !");
+        } else {
+            alert("Write something !")
+        };
+    };
+
+    return (
+        <>
+            <div className='createPost mb-3 p-3'>
+                <textarea ref={Article} className="form-control p-2 mb-3" placeholder='Write your article' style={{ maxHeight: "60px", minHeight: "60px" }}></textarea>
+                <div>
+                    <div>
+                        <input type="file" ref={inputPost} id='post' onChange={e => setPost(e.target.files[0])} className="form-control" accept='.jpg, .png, .jpeg, .mkv, .mp4' />
+                    </div>
+                    <button className='btn btn-primary py-1 px-2' onClick={SendPost}>Send <i className="bi bi-send"></i></button>
+                </div>
+            </div>
+            <div className='Posts'>
+                {PostData.map(ele => <Posts data={ele}/>)}
+            </div>
+        </>
+    );
 };
