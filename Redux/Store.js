@@ -3,7 +3,7 @@ import UsersChat from "../UserPage/Account/Chat/UsersChat";
 
 const DefaultState = {
     ActiveComments: false, TargetPost: null, ActiveChat: false,
-    messages: {component: <UsersChat />}
+    messages: {component: <UsersChat />}, Search: []
 };
 
 const CommentReducer = (state = DefaultState, action) => {
@@ -38,7 +38,14 @@ const ChatReducer = (state = DefaultState, action) => {
     return state;
 };
 
-const root = combineReducers({ CommentReducer, ChatReducer });
+const SearchReducer = (state = DefaultState, action) => {
+    if (action.type === 'Target') {
+        return {...state, Search: action.payload};
+    }
+    return state;
+};
+
+const root = combineReducers({ CommentReducer, ChatReducer, SearchReducer });
 const store = CreateStore(root, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 export default store;

@@ -7,6 +7,7 @@ import Posts from './Posts';
 import Comments from './Comments';
 import { useSelector, useDispatch } from 'react-redux';
 import Chat from './Chat/Chat';
+import { GrUpdate } from 'react-icons/gr';
 
 export default function Account({ content = <AppPosts /> }) {
 
@@ -27,16 +28,24 @@ export default function Account({ content = <AppPosts /> }) {
 
     function ShowChats() {
         dispatch({ type: "ShowChat" });
-    }
+    };
+
+    function Search() {
+        const Page = window.location.pathname;
+
+        if (Page.includes("Friends")) {
+            
+        }
+    };
 
   return (
     <>
         {commentsToggle ? <Comments /> : null}
         <div className={`Parent AccountHome ${commentsToggle ? 'disactive' : ''}`}>
             <header className='row align-items-center border p-2'>
-                <h4 className='col-4'>CS|Chat System</h4>
-                <div className='col-5'>
-                    <input type="search" className="form-control p-1" placeholder='Search'/>
+                <h4 className='col-3'>CS|Chat System</h4>
+                <div className='col-6 d-flex justify-content-center'>
+                    <input type="search" className="form-control p-1 w-75" placeholder='Search'/>
                 </div>
                 <div className='col-3 row justify-content-center'>
                     <div className='col-3 mx-3 HeaderItems' onClick={ShowChats}>
@@ -51,11 +60,12 @@ export default function Account({ content = <AppPosts /> }) {
                 </div>
             </header>
             <section className='row SectionHome'>
-                <div className='Menu col-3 p-3'>
-                    <ul className='navbar'>
+                <div className='Menu col-3 px-2 py-3'>
+                    <ul className='navbar p-2'>
                         <li><a href={`/account/${userId}`}><i className="bi bi-house"></i> Home</a></li>
                         <li><a href={`/account/${userId}/Friends`}><span className="material-symbols-outlined">person_add</span>Add Friend</a></li>
                         <li><a href={`/account/${userId}/FriendsRequests`}><span className="material-symbols-outlined">person</span>Friends Requests</a></li>
+                        <li><a href={`/account/${userId}/UpdateData`}><span><GrUpdate /></span>Update Data</a></li>
                     </ul>
                 </div>
                 <div className='Content col-6 p-3'>

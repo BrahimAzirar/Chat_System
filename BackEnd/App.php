@@ -103,6 +103,42 @@
 
             return $response;
         }
+
+        public function setFirstName(int $id, string $FirstName)
+        {
+            $update = $this -> conn -> prepare("UPDATE Users SET FirstName = ? WHERE UserId = $id");
+            $update -> execute([$FirstName]);
+        }
+
+        public function setLastName(int $id, string $LastName)
+        {
+            $update = $this -> conn -> prepare("UPDATE Users SET LastName = ? WHERE UserId = $id");
+            $update -> execute([$LastName]);
+        }
+
+        public function setThel(int $id, string $Thel)
+        {
+            $update = $this -> conn -> prepare("UPDATE Users SET Thel = ? WHERE UserId = $id");
+            $update -> execute([$Thel]);
+        }
+
+        public function setEmail(int $id, string $Email)
+        {
+            $update = $this -> conn -> prepare("UPDATE Users SET Email = ? WHERE UserId = $id");
+            $update -> execute([$Email]);
+        }
+
+        public function setPassword(int $id, string $Password)
+        {
+            $update = $this -> conn -> prepare("UPDATE Users SET _Password = ? WHERE UserId = $id");
+            $update -> execute([$Password]);
+        }
+
+        public function setProfile(int $id, string $Profile)
+        {
+            $update = $this -> conn -> prepare("UPDATE Users SET _Profile = ? WHERE UserId = $id");
+            $update -> execute([$Profile]);
+        }
     }
 
     class Posts {

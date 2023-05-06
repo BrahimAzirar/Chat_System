@@ -22,6 +22,32 @@
         echo json_encode($user -> GetProfile($_POST['id']));
     }
 
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "GetUser") {
+        header("Content-Type: JSON");
+        echo json_encode($user -> GetUser($_POST['id']));
+    }
+
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "Update_First_Last_Name") {
+        $user -> setFirstName($_POST['UserId'], $_POST['FirstName']);
+        $user -> setLastName($_POST['UserId'], $_POST['LastName']);
+    }
+
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "Update_Email") {
+        $user -> setEmail($_POST['UserId'], $_POST['Email']);
+    }
+
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "Update_Thel") {
+        $user -> setThel($_POST['UserId'], $_POST['Thel']);
+    }
+
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "Update_Password") {
+        $user -> setPassword($_POST['UserId'], $_POST['Password']);
+    }
+
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "Update_Profile") {
+        $user -> setProfile($_POST['UserId'], $_POST['Profile']);
+    }
+
     elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "GetUsersPost") {
         header("Content-Type: JSON");
         $data = [
