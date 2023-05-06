@@ -3,7 +3,7 @@ import UsersChat from "../UserPage/Account/Chat/UsersChat";
 
 const DefaultState = {
     ActiveComments: false, TargetPost: null, ActiveChat: false,
-    messages: {component: <UsersChat />}, Search: []
+    messages: {component: <UsersChat />}, Search: [], searchResult: []
 };
 
 const CommentReducer = (state = DefaultState, action) => {
@@ -40,7 +40,18 @@ const ChatReducer = (state = DefaultState, action) => {
 
 const SearchReducer = (state = DefaultState, action) => {
     if (action.type === 'Target') {
-        return {...state, Search: action.payload};
+        return {...state, Search: action.payload, searchResult: action.payload};
+    }
+    else if (action.type === 'SearchFriend') {
+        const result = state.Search.filter(ele => `${ele.FirstName} ${ele.LastName}`.includes(action.payload));
+        return {...state, searchResult: result};
+    }
+    else if (action.type === 'DefaultValue') {
+        return {...state, searchResult: state.Search};
+    }
+    else if (action.type === 'UpdateFriends') {
+        const result = state.Search.filter(ele => ele.id !== action.payload);
+        return {...state, searchResult: result};
     }
     return state;
 };

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function AddFriends() {
 
-    const [Friends, setFriends] = useState([]);
+    const Friends = useSelector(state => state.SearchReducer.searchResult);
+    const dispatch = useDispatch();
+
     const [FriendsRequests, setFriendsRequests] = useState([]);
 
     const userId = parseInt(useParams().userId);
@@ -23,7 +26,7 @@ export default function AddFriends() {
                                 return ele;
                             };
                         });
-                        setFriends(data);
+                        dispatch({type: "Target", payload: data});
                     });
             });
 

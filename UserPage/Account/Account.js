@@ -30,10 +30,17 @@ export default function Account({ content = <AppPosts /> }) {
         dispatch({ type: "ShowChat" });
     };
 
-    function Search() {
+    function Search(e) {
         const Page = window.location.pathname;
+        const SearchValue = e.target.value;
+
+        if (SearchValue === '') {
+            dispatch({type: "DefaultValue"});
+        };
 
         if (Page.includes("Friends")) {
+            dispatch({type: "SearchFriend", payload: SearchValue});
+        } else {
             
         }
     };
@@ -45,7 +52,7 @@ export default function Account({ content = <AppPosts /> }) {
             <header className='row align-items-center border p-2'>
                 <h4 className='col-3'>CS|Chat System</h4>
                 <div className='col-6 d-flex justify-content-center'>
-                    <input type="search" className="form-control p-1 w-75" placeholder='Search'/>
+                    <input type="search" className="form-control p-1 w-75" onChange={Search} placeholder='Search'/>
                 </div>
                 <div className='col-3 row justify-content-center'>
                     <div className='col-3 mx-3 HeaderItems' onClick={ShowChats}>

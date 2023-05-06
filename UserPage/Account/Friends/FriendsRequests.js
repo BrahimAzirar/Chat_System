@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 export default function FriendsRequests() {
 
-    const [FriendsRequ, setFriendsRequ] = useState([]);
+    const FriendsRequ = useSelector(state => state.SearchReducer.searchResult);
+    const dispatch = useDispatch();
 
     const userId = parseInt(useParams().userId);
 
@@ -12,21 +14,21 @@ export default function FriendsRequests() {
         axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', new URLSearchParams({
             type: "GetFriendsRequests", UserId: userId
         }))
-            .then(resp => setFriendsRequ(resp.data));
+            .then(resp => dispatch({type: "Target", payload: resp.data}));
     }, []);
 
     function AcceptFriend(FriendId) {
         axios.post(`http://localhost/Chat_System/src/BackEnd/FriendsRequests.php`, new URLSearchParams({
             type: "AcceptingFriend", UserId: userId, FriendId: FriendId
         }));
-        setFriendsRequ(prev => prev.filter(ele => ele.id !== FriendId));
+        dispatch({type: "UpdateFriends", payload: FriendId})
     };
 
     function DisacceptFriend(FriendId) {
         axios.post('http://localhost/Chat_System/src/BackEnd/FriendsRequests.php', new URLSearchParams({
             type: "DisacceptingFriend", UserId: FriendId, FriendId: userId
         }));
-        setFriendsRequ(prev => prev.filter(ele => ele.id !== FriendId));
+        dispatch({type: "UpdateFriends", payload: FriendId});
     };
 
   return (
