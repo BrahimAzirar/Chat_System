@@ -8,6 +8,7 @@ export default function UsersChat() {
 
     const dispatch = useDispatch();
 
+    const [Default, setDefault] = useState([]);
     const [FriendsList, setFriendsList] = useState([]);
     const userId = parseInt(useParams().userId);
 
@@ -15,36 +16,28 @@ export default function UsersChat() {
       axios.post(`http://localhost/Chat_System/src/BackEnd/FriendsRequests.php`, new URLSearchParams({
         type: "GetFriends", UserId: userId
       }))
-        .then(resp => setFriendsList(resp.data));
+        .then(resp => setDefault(resp.data));
     }, []);
+
+    useEffect(() => {
+      if (Default.length > 0) {
+        setFriendsList(Default);
+      }
+    }, [Default]);
 
     function HideChat() {
         dispatch({ type: "HideChat" });
     };
 
     function SearchFriend(e) {
-      // const FriendName = e.target.value; let FriendArr = [];
-      // axios.get(`http://localhost:3005/Users/${userId}`).then(resp => {
-      //   resp.data.FriendsList.forEach(ele => {
-      //     axios.get(`http://localhost:3005/Users/${ele}`).then(friend => {
-      //       if (FriendName) {
-      //         const data = [];
-      //         FriendArr = [...FriendArr, {
-      //           FullName: `${friend.data.FirstName} ${friend.data.LastName}`, id: friend.data.id
-      //         }];
-      //         FriendArr.forEach(ele => {
-      //           if (ele.FullName.includes(FriendName)) {
-      //             data.push(ele.id);
-      //           }
-      //         });
-      //         setFriendsList(data);
-      //       } else {
-      //         setFriendsList(resp.data.FriendsList);
-      //       }
-      //     });
-      //   });
-      // });
-    }
+      const FriendName = e.target.value;
+
+      if (FriendName === '') {
+        setFriendsList(Default);
+      };
+
+      setFriendsList(prev => prev.filter(ele => ''));
+    };
 
   return (
     <>
@@ -59,7 +52,7 @@ export default function UsersChat() {
       </div>
       <div className='Friends mt-1'>
         {FriendsList.length > 0 ? FriendsList.map((ele, idx) => <Friends item={idx} Friend={ele} />) :
-        <p className='CommentAlert'>No Friends</p>}
+          <p className='CommentAlert'>No Friends</p>}
       </div>
     </>
   );

@@ -53,6 +53,16 @@ const SearchReducer = (state = DefaultState, action) => {
         const result = state.Search.filter(ele => ele.id !== action.payload);
         return {...state, searchResult: result};
     }
+    else if (action.type === 'AddPost') {
+        return {
+            ...state, Search: [...state.Search, action.payload],
+            searchResult: [...state.Search, action.payload]
+        };
+    }
+    else if (action.type === 'SearchPost') {
+        const result = state.Search.filter(ele => ele.PostActicle.includes(action.payload));
+        return {...state, searchResult: result};
+    }
     return state;
 };
 

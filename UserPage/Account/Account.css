@@ -151,14 +151,11 @@
     background-color: #EEE;
 }
 
-.Content_Post {
-    /* max-height: 300px; */
-}
-
 .Content_Post > div:first-of-type {
     height: fit-content;
     max-height: 100px;
     overflow-x: hidden;
+    overflow-wrap: anywhere;
 }
 
 .Content_Post > div:last-of-type {
@@ -256,6 +253,7 @@
 
 .UserComment > div:last-of-type p {
     font-size: .8rem;
+    overflow-wrap: anywhere;
 }
 
 .Chats {
@@ -373,6 +371,7 @@
     width: fit-content;
     padding: 5px 7px !important;
     position: relative;
+    overflow-wrap: anywhere;
 }
 
 .User {

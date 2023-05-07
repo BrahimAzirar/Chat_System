@@ -41,7 +41,7 @@ export default function Account({ content = <AppPosts /> }) {
         if (Page.includes("Friends")) {
             dispatch({type: "SearchFriend", payload: SearchValue});
         } else {
-            
+            dispatch({type: "SearchPost", payload: SearchValue});
         }
     };
 
@@ -90,7 +90,9 @@ export default function Account({ content = <AppPosts /> }) {
 
 function AppPosts() {
 
-    const [PostData, setPostData] = useState([]);
+    const PostData = useSelector(state => state.SearchReducer.searchResult);
+    const dispatch = useDispatch();
+
     const [Post, setPost] = useState(null);
     const inputPost = useRef();
 
@@ -100,7 +102,7 @@ function AppPosts() {
         axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', new URLSearchParams({
             type: "GetAllPosts"
         }))
-            .then(resp => setPostData(resp.data));
+            .then(resp => dispatch({type: "Target", payload: resp.data}));
     }, []);
 
     useEffect(() => {
@@ -112,7 +114,7 @@ function AppPosts() {
                 PostDate: now, UserId: parseInt(userId), type: "AddPost"
             });
             axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', myPost)
-                .then(resp => setPostData([...PostData, resp.data]));
+                .then(resp => dispatch({type: "AddPost", payload: resp.data}));
             Article.current.value = ''; inputPost.current.value = '';
         };
     }, [Post]);
