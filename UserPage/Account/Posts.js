@@ -1,11 +1,11 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AiOutlineLike, AiOutlineDislike } from 'react-icons/ai';
 import { BiCommentDetail } from 'react-icons/bi';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-export default function Posts({ data }) {
+export default function Posts({ data, posts }) {
   const dispatch = useDispatch();
 
   const [LikesColor, setLikesColor] = useState('');
@@ -14,6 +14,8 @@ export default function Posts({ data }) {
   const [DislikeCount, setDislikeCount] = useState([]);
   const [TargetUser, setTargetUser] = useState([]);
   const userId = parseInt(useParams().userId);
+  const [Show, setShow] = useState({display: "none"});
+  const ModifiesMenu = useRef();
 
   useEffect(() => {
     axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', new URLSearchParams({
@@ -28,6 +30,9 @@ export default function Posts({ data }) {
         setLikeCount(resp.data.Likes); setDislikeCount(resp.data.Dislikes);
       });
 
+      if (window.location.pathname.includes("Profile")) {
+        setShow({});
+      };
   }, []);
 
   useEffect(() => {
@@ -150,7 +155,16 @@ export default function Posts({ data }) {
   function ShowTheCommentsComponents() {
     dispatch({ type: 'ShowComments' });
     dispatch({ type: 'TragetPost', payload: data });
-  }
+  };
+
+  function DeletePost(id) {
+    axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', new URLSearchParams({
+      type: "DeletePost", PostId: id
+    }));
+
+    posts(prev => prev.filter(ele => ele.id !== data.id));
+    ModifiesMenu.current.classList.toggle("HideModifiesMenu");
+  };
 
   return (
     <div className='PostContent mb-2 p-3' key={data.id}>
@@ -158,7 +172,17 @@ export default function Posts({ data }) {
         <div className='border'>
           <img src={TargetUser.Profile} width='100%' height='100%' style={{ borderRadius: "100%" }} />
         </div>
-          <p>{`${TargetUser.FirstName} ${TargetUser.LastName}`}</p>
+        <p className='ms-2'>{`${TargetUser.FirstName} ${TargetUser.LastName}`}</p>
+        <div className='PostMenu'>
+          <div style={Show} onClick={() => ModifiesMenu.current.classList.toggle("HideModifiesMenu")}>
+            <i class="fa-solid fa-ellipsis"></i>
+          </div>
+          <ul ref={ModifiesMenu} className='ModifiesMenu HideModifiesMenu p-2'>
+            <li className='px-2 py-1 text-danger' onClick={() => DeletePost(data.id)}>
+              <i className="fa-solid fa-trash"></i> <span>Delete Post</span>
+            </li>
+          </ul>
+        </div>
       </div>
       <div className='Content_Post'>
         <div className='mb-2'>{data.PostActicle}</div>

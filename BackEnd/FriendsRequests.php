@@ -31,5 +31,10 @@
         echo json_encode($Friends -> AcceptedFriends($_POST['UserId']));
     }
 
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "GetUserFriend") {
+        header("Content-Type: JSON");
+        echo json_encode($Friends -> GetUserFirends($_POST['UserId']));
+    }
+
 
 ?>

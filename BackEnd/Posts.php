@@ -47,4 +47,13 @@
         echo json_encode($comment -> GetPostComments($_POST['PostId']));
     }
 
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "GetUserPosts") {
+        header("Content-Type: JSON");
+        echo json_encode($post -> GetUserPosts($_POST['UserId']));
+    }
+
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "DeletePost") {
+        $post -> DeletePost($_POST['PostId']);
+    }
+
 ?>

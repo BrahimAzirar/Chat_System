@@ -8,6 +8,7 @@
 
     $user = new Users();
     $FriendsReq = new FriendsRequests();
+    $friendsList = new FriendsList();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "CreateAccount") {
         new Users($_POST['FirstName'], $_POST['LastName'], $_POST['Thel'], $_POST['Email'], $_POST['Password'],
@@ -87,6 +88,26 @@
         };
 
         foreach ($usersArr as $id) {
+            array_push($requests, $user -> GetUser($id));
+        };
+
+        echo json_encode(array_map('Filter', $requests));
+    }
+
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "GetUserFriend") {
+        header("Content-Type: JSON");
+        $requests = []; $friends = $friendsList -> GetUserFirends($_POST['UserId']);
+
+        function Filter(array $arr) {
+            return [
+                'id' => $arr['id'],
+                'FirstName' => $arr['FirstName'],
+                'LastName' => $arr['LastName'],
+                'Profile' => $arr['Profile']
+            ];
+        };
+
+        foreach ($friends as $id) {
             array_push($requests, $user -> GetUser($id));
         };
 

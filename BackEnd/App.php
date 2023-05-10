@@ -220,6 +220,31 @@
 
             return $response;
         }
+
+        public function GetUserPosts(int $UserId)
+        {
+            $response = [];
+            $posts = $this -> conn -> prepare("SELECT * FROM Posts where UserId = ?");
+            $posts -> execute([$UserId]);
+
+            foreach ($posts as $post) {
+                array_push($response, [
+                    'id' => $post['PostId'],
+                    'UserId' => $post['UserId'],
+                    'PostActicle' => $post['PostActicle'],
+                    'PostData' => $post['PostData'],
+                    'PostDate' => $post['PostDate']
+                ]);
+            };
+
+            return $response;
+        }
+
+        public function DeletePost($id)
+        {
+            $delete = $this -> conn -> prepare("DELETE FROM Posts WHERE PostId = ?");
+            $delete -> execute([$id]);
+        }
     }
 
     class Interaction {
@@ -404,6 +429,19 @@
 
             foreach ($Friends as $id) {
                 array_push($response, $id['FriendId']);
+            };
+
+            return $response;
+        }
+
+        public function GetUserFirends(int $id)
+        {
+            $response = [];
+            $Friends = $this -> conn -> prepare("SELECT FriendId FROM FriendsList WHERE UserId = ?");
+            $Friends -> execute([$id]);
+
+            foreach ($Friends as $friend) {
+                array_push($response, $friend['FriendId']);
             };
 
             return $response;

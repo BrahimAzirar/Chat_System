@@ -8,11 +8,13 @@ import Comments from './Comments';
 import { useSelector, useDispatch } from 'react-redux';
 import Chat from './Chat/Chat';
 import { GrUpdate } from 'react-icons/gr';
+import UserMenu from './UserMenu/UserMenu';
 
 export default function Account({ content = <AppPosts /> }) {
 
     const commentsToggle = useSelector(state => state.CommentReducer.ActiveComments);
     const chatToggle = useSelector(state => state.ChatReducer.ActiveChat);
+    const UserMenuToggle = useSelector(state => state.UserMenuReducer.ActiveUserMenu);
     const dispatch = useDispatch();
 
     const [Profile, setProfile] = useState('');
@@ -28,6 +30,12 @@ export default function Account({ content = <AppPosts /> }) {
 
     function ShowChats() {
         dispatch({ type: "ShowChat" });
+        dispatch({type: "ShowUserMenu", payload: false});
+    };
+
+    function ShowUserMenu() {
+        dispatch({type: "ShowUserMenu", payload: !UserMenuToggle});
+        dispatch({ type: "HideChat" });
     };
 
     function Search(e) {
@@ -61,8 +69,9 @@ export default function Account({ content = <AppPosts /> }) {
                     <div className='col-3 mx-3 HeaderItems'>
                         <i className="bi bi-bell"></i>
                     </div>
-                    <div className='col-3 mx-3 HeaderItems'>
-                        <a href="#"><img src={Profile} alt="Profile" width='100%' height='100%' style={{ borderRadius: "100%" }} /></a>
+                    <div className='col-3 mx-3 HeaderItems border' onClick={ShowUserMenu}>
+                        <img src={Profile} alt="Profile" width='100%' height='100%' style={{ borderRadius: "100%" }} />
+                        <span class="material-symbols-outlined arrowIcon"><p>expand_more</p></span>
                     </div>
                 </div>
             </header>
@@ -80,6 +89,7 @@ export default function Account({ content = <AppPosts /> }) {
                 </div>
                 <div className='col-3'>
                     {chatToggle ? <Chat/> : null}
+                    {UserMenuToggle ? <UserMenu/> : null}
                 </div>
             </section>
         </div>
