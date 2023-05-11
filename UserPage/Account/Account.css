@@ -585,6 +585,28 @@
     overflow-x: hidden;
 }
 
+.Profile > div:nth-child(3) > div {
+    width: 90%;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Profile > div:nth-child(3) > div > div:first-child {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+}
+
+.Profile > div:nth-child(3) > div div.ImageContent {
+    width: 55px;
+    height: 55px;
+    border-radius: 100%;
+}
+
 .Profile > div:last-of-type {
     grid-column: 6 / span 6;
     overflow-x: hidden;

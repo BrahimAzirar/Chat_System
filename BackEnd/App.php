@@ -139,6 +139,12 @@
             $update = $this -> conn -> prepare("UPDATE Users SET _Profile = ? WHERE UserId = $id");
             $update -> execute([$Profile]);
         }
+
+        public function DeleteFriend(int $id)
+        {
+            $delete = $this -> conn -> prepare("CALL OnDeleteUser(?)");
+            $delete -> execute([$id]);
+        }
     }
 
     class Posts {

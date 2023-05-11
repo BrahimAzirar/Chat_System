@@ -33,7 +33,7 @@ export default function Profile() {
     axios.post("http://localhost/Chat_System/src/BackEnd/Users.php", new URLSearchParams({
       type: "GetUserFriend", UserId: userId
     }))
-      .then(resp => console.log(resp.data));
+      .then(resp => setUserFriends(resp.data));
   }, []);
 
   useEffect(() => {
@@ -115,12 +115,38 @@ export default function Profile() {
           </div>
         </div>
         <div className='ProfileFriends border'>
-          {}
+          {UserFriends.map(ele => <Friends data={ele}/>)}
         </div>
         <div className='ProfilePosts border'>
           {UserPost.map(ele => <Posts data={ele} posts={setUserPost}/>)}
         </div>
       </div>
     </>
+  );
+};
+
+function Friends({ data }) {
+
+  const Parent = useRef();
+
+  function DeleteFriend(FriendId) {
+    axios.post("http://localhost/Chat_System/src/BackEnd/Users.php", new URLSearchParams({
+      type: "DeleteFriend", FriendId: FriendId
+    }));
+    Parent.current.remove();
+  };
+
+  return (
+    <div key={data.id} ref={Parent} className='my-2 mx-auto p-2'>
+      <div>
+        <div className='ImageContent border'>
+          <img src={data.Profile} width="100%" height="100%" style={{ borderRadius: "100%" }} />
+        </div>
+        <p className='ms-2'>{`${data.FirstName} ${data.LastName}`}</p>
+      </div>
+      <button className='btn btn-danger py-1 px-2' onClick={() => DeleteFriend(data.id)}>
+        <i className="fa-solid fa-trash"></i> Delete Friend
+      </button>
+    </div>
   );
 };

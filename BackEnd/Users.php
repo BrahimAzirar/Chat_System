@@ -114,6 +114,10 @@
         echo json_encode(array_map('Filter', $requests));
     }
 
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "DeleteFriend") {
+        $user -> DeleteFriend($_POST['FriendId']);
+    }
+
     else {
         header("Content-Type: JSON");
         echo json_encode($user -> GetAllData());
