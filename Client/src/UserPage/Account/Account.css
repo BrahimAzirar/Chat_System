@@ -1,0 +1,489 @@
+* {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+}
+
+*::-webkit-scrollbar {
+    width: 5px;
+    opacity: .5;
+  }
+  
+  /* Handle */
+  *::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  *::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+.AccountHome {
+    background-color: #F0F2F5;
+}
+
+.AccountHome header {
+    background-color: white;
+}
+
+.HeaderItems {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    border-radius: 100%;
+    background-color: #EEE;
+}
+
+.HeaderItems:hover {
+    background-color: #d7d7d7;
+}
+
+.SectionHome {
+    height: 91%;
+    overflow: hidden;
+}
+
+.SectionHome > div {
+    /* border: 1px solid; */
+}
+
+.createPost {
+    height: 130px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.createPost > div:last-child {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.navbar {
+    list-style: none;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+    text-decoration: none;
+}
+
+.navbar li a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    color: rgba(0, 0, 0, 0.872);
+    text-decoration: none;
+    padding: 5px 7px !important;
+}
+
+.navbar li a * {
+    margin: 0 3px !important;
+}
+
+.navbar li {
+    margin: 4px 0 !important;
+    width: 100%;
+}
+
+.navbar li:hover {
+    background-color: #EEE;
+    border-radius: 5px;
+}
+
+.Posts {
+    height: 435px;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.PostContent {
+    width: 90%;
+    height: fit-content;
+    /* max-height: 400px; */
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.PostHeader {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.PostHeader > div:first-child {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+}
+
+.PostFooter {
+    height: 40px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.PostFooter > div {
+    width: 60px;
+    padding: 2px !important;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.PostFooter > div:hover {
+    background-color: #EEE;
+}
+
+.Content_Post > div:first-of-type {
+    height: fit-content;
+    max-height: 100px;
+    overflow-x: hidden;
+    overflow-wrap: anywhere;
+}
+
+.Content_Post > div:last-of-type {
+    height: fit-content;
+    /* max-height: 200px; */
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comment {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    width: 50%;
+    height: 300px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.comment > div:first-of-type {
+    width: 40px;
+    height: 40px;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 95%;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.comment > div:first-of-type:hover {
+    background-color: #EEE;
+}
+
+.comment > div:last-of-type {
+    height: 85%;
+}
+
+.comment > div:last-of-type form {
+    height: 60px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+}
+
+.comment > div:last-of-type > div {
+    height: 155px;
+    position: relative;
+    margin-top: 10px !important;
+    overflow-x: hidden;
+}
+
+.disactive {
+    pointer-events: none;
+    opacity: .8;
+}
+
+.CommentAlert {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.1rem;
+}
+
+.UserComment {
+    height: fit-content;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.UserComment > div:first-of-type {
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+    border: 1px solid #eee;
+}
+
+.UserComment > div:last-of-type {
+    max-width: 550px;
+    background-color: #eee;
+    padding: 7px 20px !important;
+    border-radius: 20px;
+}
+
+.UserComment > div:last-of-type p {
+    font-size: .8rem;
+    overflow-wrap: anywhere;
+}
+
+.Chats {
+    position: relative;
+    width: 95%;
+    min-height: 150px;
+    max-height: 680px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.CancelChat {
+    width: 30px;
+    height: 30px;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.CancelChat:hover {
+    background-color: #EEE;
+}
+
+.Friends {
+    min-height: 60px;
+    max-height: 680px;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.Friend {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 0 5px !important;
+    /* border: 1px solid; */
+}
+
+.Friend:hover {
+    background: #EEE;
+}
+
+.Friend > div:first-of-type {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+}
+
+.Friend > div:last-of-type {
+    width: 250px;
+    height: 45px;
+}
+
+.messages {
+    height: 550px;
+}
+
+.messages > div:first-of-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.messages > div:first-of-type > div:first-of-type {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.messages > div:first-of-type > div:first-of-type:hover {
+    background-color: #EEE;
+}
+
+.messages > div:first-of-type > div:last-of-type {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #EEE;
+    border-radius: 100%;
+}
+
+.messages > div:last-of-type {
+    height: 480px;
+    overflow-x: hidden;
+}
+
+.messages > div:last-of-type::-webkit-scrollbar {
+    display: none;
+}
+
+.messages form {
+    display: flex;
+    justify-content: space-around;
+}
+
+.ParentUser {
+    display: flex;
+    justify-content: end;
+    overflow-wrap: anywhere;
+}
+
+.User, .Target {
+    width: fit-content;
+    padding: 5px 7px !important;
+    position: relative;
+    overflow-wrap: anywhere;
+}
+
+.User {
+    background: #0d6efd;
+    color: white;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-left-radius: 7px;
+}
+
+.User::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: -4px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-right: 5px solid #0d6efd;
+    transform: rotate(45deg);
+}
+
+.Target {
+    background: #EEE;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.Target::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -4px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-left: 5px solid #eee;
+    transform: rotate(-45deg);
+}
+
+.ListUsers {
+    width: 90%;
+    height: fit-content;
+    max-height: 500px;
+    overflow-x: hidden;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.ListUsers > div, .userData {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.userData > div:first-child {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #EEE;
+    border-radius: 100%;
+}
+
+.UpdatePage {
+    height: 600px;
+    overflow-x: hidden;
+}
+
+.UpdatePage > div {
+    width: 99%;
+    padding: 15px !important;
+    margin: 0 0 10px 0 !important;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 7px 1px #e1e1e1;
+}
+
+.Up_First_Last_Name form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.Up_First_Last_Name form > div:first-child, .Up_First_Last_Name form > div:nth-child(2) {
+    width: calc(95% / 2);
+}
+
+.Up_First_Last_Name form div:last-child, .Up_Email form > div:last-of-type,
+.Up_Thel form > div:last-of-type, .Up_Password form > div:last-of-type {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+.Up_First_Last_Name form div:last-child button, .Up_Email form > div:last-of-type button,
+.Up_Thel form > div:last-of-type button, .Up_Password form > div:last-of-type button {
+    display: flex;
+    align-items: center;
+}
+
+.Up_Email form > div:first-of-type, .Up_Thel form > div:first-of-type, 
+.Up_Password form > div:not(:last-of-type) {
+    display: flex;
+    justify-content: center;
+}
+
+.Up_Email form > div:first-of-type input, .Up_Thel form > div:first-of-type input,
+.Up_Password form > div:not(:last-of-type) input {
+    width: 97%;
+}
