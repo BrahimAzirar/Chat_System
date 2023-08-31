@@ -93,9 +93,9 @@
         echo json_encode(array_map('Filter', $requests));
     }
 
-    else {
+    elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['type'] === "EnterToAccount") {
         header("Content-Type: JSON");
-        echo json_encode($user -> GetAllData());
+        print json_encode($user -> GetUserId($_POST['Email'], $_POST['Password']));   
     }
 
 ?>

@@ -1,23 +1,46 @@
 import axios from 'axios';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+import DefaulttImg from './ImageDefault.webp'; 
 
 export default function SignUp() {
 
+	const [Profile, setProfile] = useState('');
     const FirstName = useRef(), LastName = useRef(), Email = useRef(), Thel = useRef(),
         Password = useRef(), ResetPassword = useRef();
+
+	useEffect(() => {
+		fetch(DefaulttImg)
+			.then(res => res.blob())
+			.then(data => setProfile(data));
+	}, []);
+
+	function fileToBase64(file) {
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		return new Promise((resolve, reject) => {
+		  reader.onload = () => {
+			resolve(reader.result);
+		  };
+		  reader.onerror = reject;
+		});
+	}
 
     function CreateAccount(e) {
         e.preventDefault();
         if (Password.current.value === ResetPassword.current.value) {
-			const data = new URLSearchParams({
-                FirstName: FirstName.current.value, LastName: LastName.current.value,
-                Email: Email.current.value, Thel: Thel.current.value,
-                Password: Password.current.value, Admin: true, type: "CreateAccount",
-				Profile: "https://image.shutterstock.com/image-vector/male-default-avatar-profile-gray-260nw-362901365.jpg"
-            });
+			fileToBase64(Profile).then(base64 => {
+				const data = new URLSearchParams({
+					FirstName: FirstName.current.value, LastName: LastName.current.value,
+					Email: Email.current.value, Thel: Thel.current.value,
+					Password: Password.current.value, Admin: false, type: "CreateAccount", Profile: base64
+				});
 
-            axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', data)
-				.then(res => window.location.href = `/account/${res.data}`);
+				axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', data)
+					.then(res => window.location.href = `/account/${res.data}`);
+			});
         } else {
             alert("The password not valid check your password !");
         };

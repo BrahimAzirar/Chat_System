@@ -1,6 +1,8 @@
 import React, { useRef } from 'react';
 import './ToAccount.css';
 import axios from 'axios';
+import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Login() {
 
@@ -8,18 +10,16 @@ export default function Login() {
 
   function EnterToAccount(e) {
     e.preventDefault();
-    axios.get('http://localhost/Chat_System/src/BackEnd/Users.php').then(res => {
-      const EnterToAccount = res.data.find(ele => {
-        if (ele.Email === Email.current.value && ele.Password === Password.current.value) {
-          return ele;
+    axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', new URLSearchParams({
+      type: "EnterToAccount", Email: Email.current.value, Password: Password.current.value
+    }))
+      .then(res => {
+        if (res.data) {
+          window.location.href = `/account/${res.data}`
+        } else {
+          alert("This account not found !!");
         }
       });
-      if (EnterToAccount) {
-        window.location.href = `/account/${EnterToAccount.id}`;
-      } else {
-        alert("This account not found !");
-      }
-    });
   };
 
   return (

@@ -6,7 +6,7 @@ drop database ChatSystem;
 create table Users (
     UserId int PRIMARY KEY not null AUTO_INCREMENT,
     FirstName varchar(15) not null,
-    LastName varchar(15) not null,
+    LastName varchar(15) not null, 
     Thel varchar(20) not null,
     Email varchar(40) not null,
     _Password varchar(20) not null,

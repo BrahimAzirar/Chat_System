@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -56,7 +57,7 @@ export default function Account({ content = <AppPosts /> }) {
                 </div>
                 <div className='col-3 row justify-content-center'>
                     <div className='col-3 mx-3 HeaderItems' onClick={ShowChats}>
-                        <i className="bi bi-chat-dots"></i>
+                        <i class="bi bi-chat-dots"></i>
                     </div>
                     <div className='col-3 mx-3 HeaderItems'>
                         <i className="bi bi-bell"></i>

@@ -59,8 +59,8 @@
         public function GetUserId(string $Email, string $Password)
         {
             $userId = null;
-            $id = $this -> conn -> prepare("SELECT UserId FROM Users WHERE Email = '$Email' AND _Password = '$Password'");
-            $id -> execute();
+            $id = $this -> conn -> prepare("SELECT UserId FROM Users WHERE Email = ? AND _Password = ?");
+            $id -> execute([$Email, $Password]);
 
             foreach ($id as $item) {
                 $userId = $item['UserId'];
