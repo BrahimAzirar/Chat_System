@@ -119,7 +119,7 @@
 .PostHeader {
     width: 30%;
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
 }
 
@@ -128,6 +128,8 @@
     height: 50px;
     border-radius: 100%;
 }
+
+.PostHeader > p { margin-left: 10px !important; }
 
 .PostFooter {
     height: 40px;

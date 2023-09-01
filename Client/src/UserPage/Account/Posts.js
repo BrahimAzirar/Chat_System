@@ -15,19 +15,50 @@ export default function Posts({ data }) {
   const [TargetUser, setTargetUser] = useState([]);
   const userId = parseInt(useParams().userId);
 
+  // useEffect(() => {
+  //   axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', new URLSearchParams({
+  //     type: "GetUsersPost", id: data.UserId
+  //   }))
+  //     .then(resp => setTargetUser(resp.data));
+
+  //   axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', new URLSearchParams({
+  //     type: "Likes&Dislikes", PostId: data.id
+  //   }))
+  //     .then(resp => {
+  //       setLikeCount(resp.data.Likes); setDislikeCount(resp.data.Dislikes);
+  //     });
+
+  // }, []);
+
   useEffect(() => {
-    axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', new URLSearchParams({
-      type: "GetUsersPost", id: data.UserId
-    }))
-      .then(resp => setTargetUser(resp.data));
+    const GetUsersPost = async () => {
+      try {
+        const result = (await axios.get(`http://localhost:8000/api/posts/userdata/${data.UserId}`)).data;
+        if (result.err) throw new Error(result.err);
+        if (result.response) {
+          setTargetUser(result.response);
+          console.log(result.response);
+        }
+      } catch (error) {
+        alert(error.message);
+      };
+    };
 
-    axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', new URLSearchParams({
-      type: "Likes&Dislikes", PostId: data.id
-    }))
-      .then(resp => {
-        setLikeCount(resp.data.Likes); setDislikeCount(resp.data.Dislikes);
-      });
+    const GetLikesDislikes = async () => {
+      try {
+        const result = (await axios.get(`http://localhost:8000/api/Interaction/LikesDislikes/${data.PostId}`)).data;
+        if (result.err) throw new Error(result.err);
+        if (result.response) {
+          setLikeCount(result.response.Likes); 
+          setDislikeCount(result.response.Dislikes);
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+    }
 
+    GetUsersPost();
+    GetLikesDislikes();
   }, []);
 
   useEffect(() => {
@@ -39,32 +70,46 @@ export default function Posts({ data }) {
     }
   }, [LikeCount, DislikeCount]);
 
-  function ReactWithLike() {
+  async function ReactWithLike() {
     if (LikesColor) {
-      const NewLikeCount = LikeCount.filter(ele => {
-        if (ele !== parseInt(userId)) {
-          return ele;
-        }
-      });
-
-      axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
-        type: "DeleteInteraction", PostId: data.id, UserId: userId
-      }));
-      setLikesColor(''); setLikeCount(NewLikeCount);
-    } else {
-      if (DislikesColor) {
-        const NewDislikeCount = DislikeCount.filter(ele => {
+      try {
+        const NewLikeCount = LikeCount.filter(ele => {
           if (ele !== parseInt(userId)) {
             return ele;
-          };
+          }
         });
+  
+        // axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+        //   type: "DeleteInteraction", PostId: data.id, UserId: userId
+        // }));
+  
+        const result = await (await axios
+          .delete(`http://localhost:8000/api/Interaction/DeleteInteraction/${data.PostId}/${data.UserId}`)).data
 
-        axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
-          type: "changingInteraction", PostId: data.id, UserId: userId, InteractionType: 'Like'
-        }));
-
-        setLikesColor('text-primary'); setDislikesColor('');
-        setLikeCount([...LikeCount, userId]); setDislikeCount(NewDislikeCount);
+        if (result.err) throw new Error(result.err);
+  
+        setLikesColor(''); setLikeCount(NewLikeCount);
+      } catch (error) {
+          alert(error);
+      }
+    } else {
+      if (DislikesColor) {
+        try {
+          const NewDislikeCount = DislikeCount.filter(ele => {
+            if (ele !== parseInt(userId)) {
+              return ele;
+            };
+          });
+  
+          axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
+            type: "changingInteraction", PostId: data.id, UserId: userId, InteractionType: 'Like'
+          }));
+  
+          setLikesColor('text-primary'); setDislikesColor('');
+          setLikeCount([...LikeCount, userId]); setDislikeCount(NewDislikeCount);
+        } catch (error) {
+            alert(error);
+        }
       } else {
         axios.post(`http://localhost/Chat_System/src/BackEnd/Posts.php`, new URLSearchParams({
           PostId: data.id, UserId: userId, InteractionType: 'Like', type: "ReactWithPost"
@@ -156,7 +201,8 @@ export default function Posts({ data }) {
     <div className='PostContent mb-2 p-3' key={data.id}>
       <div className='PostHeader'>
         <div className='border'>
-          <img src={TargetUser.Profile} width='100%' height='100%' style={{ borderRadius: "100%" }} />
+          <img src={TargetUser.Profile ? TargetUser.Profile : '/Images/ImageDefault.webp'} 
+            width='100%' height='100%' style={{ borderRadius: "100%" }} />
         </div>
           <p>{`${TargetUser.FirstName} ${TargetUser.LastName}`}</p>
       </div>

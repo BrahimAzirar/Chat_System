@@ -17,7 +17,7 @@ return new class extends Migration
             $table -> string('LastName', 15) -> nullable(false);
             $table -> string('Thel', 15) -> nullable(false);
             $table -> string('Email', 50) -> nullable(false);
-            $table -> string('_Password', 30) -> nullable(false);
+            $table -> string('_Password', 100) -> nullable(false);
             $table -> binary('_Profile') -> nullable();
             $table->timestamps();
         });

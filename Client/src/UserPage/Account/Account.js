@@ -16,16 +16,27 @@ export default function Account({ content = <AppPosts /> }) {
     const chatToggle = useSelector(state => state.ChatReducer.ActiveChat);
     const dispatch = useDispatch();
 
-    const [Profile, setProfile] = useState('');
+    const [Member, setMember] = useState([]);
+    const [Profile, setProfile] = useState(null);
     const userId = useParams().userId;
 
     useEffect(() => {
-        const data = new URLSearchParams({
-            type: "GetProfile", id: parseInt(userId)
-        });
-        axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', data)
-            .then(resp => setProfile(resp.data));
+        const GetMemberData = async () => {
+            try {
+                const result = (await axios.get(`http://localhost:8000/api/member/getData/${userId}`)).data;
+                if (result.err) throw new Error(result.err);
+                if (result.response) setMember(result.response);
+            } catch (error) {
+                alert(error);
+            };
+        }
+
+        GetMemberData();
     }, []);
+
+    useEffect(() => {
+        if (Member) setProfile(Member._Profile ? Member._Profile : '/Images/ImageDefault.webp');
+    }, [Member])
 
     function ShowChats() {
         dispatch({ type: "ShowChat" });
@@ -100,10 +111,17 @@ function AppPosts() {
     const userId = useParams().userId;
 
     useEffect(() => {
-        axios.post('http://localhost/Chat_System/src/BackEnd/Posts.php', new URLSearchParams({
-            type: "GetAllPosts"
-        }))
-            .then(resp => dispatch({type: "Target", payload: resp.data}));
+        const GetAllPostsData = async () => {
+            try {
+                const result = (await axios.get(`http://localhost:8000/api/posts/getAllData`)).data;
+                if (result.err) throw new Error(result.err);
+                if(result.response) dispatch({ type: "Target", payload: result.response });
+            } catch (error) {
+                alert(error.message);
+            };
+        };
+
+        GetAllPostsData();
     }, []);
 
     useEffect(() => {

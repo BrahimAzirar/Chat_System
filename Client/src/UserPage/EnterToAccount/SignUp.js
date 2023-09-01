@@ -1,12 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
-import DefaulttImg from "./ImageDefault.webp";
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
-  const [Profile, setProfile] = useState("");
   const FirstName = useRef(),
     LastName = useRef(),
     Email = useRef(),
@@ -14,45 +12,25 @@ export default function SignUp() {
     Password = useRef(),
     ResetPassword = useRef();
 
-  useEffect(() => {
-    fetch(DefaulttImg)
-      .then((res) => res.blob())
-      .then((data) => setProfile(data));
-  }, []);
-
-  function fileToBase64(file) {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    return new Promise((resolve, reject) => {
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.onerror = reject;
-    });
-  }
+	const redirect = useNavigate();
 
   function CreateAccount(e) {
     e.preventDefault();
-    if (Password.current.value === ResetPassword.current.value) {
-      fileToBase64(Profile).then((base64) => {
-        const data = new URLSearchParams({
-          FirstName: FirstName.current.value,
-          LastName: LastName.current.value,
-          Email: Email.current.value,
-          Thel: Thel.current.value,
-          Password: Password.current.value,
-          Admin: false,
-          type: "CreateAccount",
-          Profile: base64,
-        });
-
-        axios
-          .post("http://localhost/Chat_System/src/BackEnd/Users.php", data)
-          .then((res) => (window.location.href = `/account/${res.data}`));
-      });
-    } else {
-      alert("The password not valid check your password !");
-    }
+    try {
+		const data = {
+			FirstName: FirstName.current.value,
+			LastName: LastName.current.value,
+			Email: Email.current.value,
+			Thel: Thel.current.value,
+			Password: Password.current.value,
+		  };
+  
+		  axios
+			.post("http://localhost:8000/api/register", data)
+			.then(res => redirect(res.data.response));
+	} catch (err) {
+		alert(err.message);
+	};
   }
 
   return (

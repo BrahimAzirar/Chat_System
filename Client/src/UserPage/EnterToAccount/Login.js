@@ -3,23 +3,23 @@ import './ToAccount.css';
 import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
 
   const Email = useRef(), Password = useRef();
+  const redirect = useNavigate();
 
-  function EnterToAccount(e) {
+  async function EnterToAccount(e) {
     e.preventDefault();
-    axios.post('http://localhost/Chat_System/src/BackEnd/Users.php', new URLSearchParams({
-      type: "EnterToAccount", Email: Email.current.value, Password: Password.current.value
-    }))
-      .then(res => {
-        if (res.data) {
-          window.location.href = `/account/${res.data}`
-        } else {
-          alert("This account not found !!");
-        }
-      });
+    try {
+      const data = { Email: Email.current.value, Password: Password.current.value };
+      const result = (await axios.post('http://localhost:8000/api/login', data)).data;
+      if (result.err) throw new Error(result.err);
+      if (result.response) redirect(result.response);
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   return (
